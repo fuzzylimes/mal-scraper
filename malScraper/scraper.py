@@ -43,10 +43,14 @@ class MAL(object):
             # print("Compelted search: " + GetTime())
             self.studios = self.GetStudios(entry)
             self.genres = self.GetGenres(entry)
+            self.episode_summary = self.GetSummary(entry)
+            self.source = self.GetSource(entry)
             self.JSON = {
                 'title': self.title,
                 'url': self.url,
                 'episode_count': self.episode_count,
+                'episode_summary': self.episode_summary,
+                'source': self.source,
                 'runtime': self.runtime,
                 'airdate': self.airdate,
                 'status': self.status,
@@ -64,6 +68,9 @@ class MAL(object):
         if episodes == "Unknown":
             return self.GetEpisodes(entry)
         return episodes
+    
+    def GetSummary(self, entry):
+        return entry.find("span", itemprop="description").text
 
     def GetRuntime(self, entry):
         return self.FindItemInPage("Duration:",entry)
@@ -79,6 +86,9 @@ class MAL(object):
 
     def GetGenres(self, entry):
         return self.FindListInPage("Genres:",entry)
+
+    def GetSource(self, entry):
+        return self.FindItemInPage("Source:",entry)
 
     def GetUserRating(self, entry):
         return self.FindItemInPage("Score:",entry)
